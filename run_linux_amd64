@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Launch the regular n-gon construction app: start the local server (using the bundled
+# venv interpreter) and open it in the default browser.  Usage: ./run_linux_amd64 [PORT]
+set -euo pipefail
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PORT="${1:-8000}"
+PY="$DIR/venv_linux_amd64/bin/python"
+URL="http://127.0.0.1:${PORT}/"
+
+if [ ! -x "$PY" ]; then
+  echo "找不到虚拟环境解释器：$PY" >&2
+  echo "请先创建：python3 -m venv --copies \"$DIR/venv_linux_amd64\" \\" >&2
+  echo "          && \"$DIR/venv_linux_amd64/bin/pip\" install -r \"$DIR/requirements.txt\"" >&2
+  exit 1
+fi
+
+echo "启动服务器：$URL  （按 Ctrl-C 停止）"
+"$PY" "$DIR/server.py" --port "$PORT" &
+SRV=$!
+trap 'kill "$SRV" 2>/dev/null || true' EXIT INT TERM
+
+# 等待端口就绪后再打开浏览器（用 venv 的 python 探测，无需 curl）
+for _ in $(seq 1 50); do
+  if "$PY" -c "import socket,sys; s=socket.socket(); s.settimeout(0.2); \
+sys.exit(0 if s.connect_ex(('127.0.0.1',${PORT}))==0 else 1)" 2>/dev/null; then
+    break
+  fi
+  sleep 0.1
+done
+
+if command -v xdg-open >/dev/null 2>&1; then
+  xdg-open "$URL" >/dev/null 2>&1 || true
+elif command -v gio >/dev/null 2>&1; then
+  gio open "$URL" >/dev/null 2>&1 || true
+else
+  echo "请在浏览器打开：$URL"
+fi
+
+wait "$SRV"

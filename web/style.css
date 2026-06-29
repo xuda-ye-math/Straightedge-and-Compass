@@ -1,0 +1,138 @@
+:root {
+  --bg: #0f1419;
+  --panel: #161b22;
+  --line: #2a313c;
+  --text: #d7dde5;
+  --muted: #8b949e;
+  --accent: #4ea1ff;
+  --done: #56607a;
+  --current: #ffcf5c;
+  --ok: #6ad27e;
+  --bad: #ff6b6b;
+  --canvas-bg: #0b0f14;
+  --btn2-bg: #21303f;
+  --row-hover: #1b2129;
+  --row-current: #20262f;
+}
+
+body.light {
+  --bg: #f4f6fa;
+  --panel: #ffffff;
+  --line: #d6dbe4;
+  --text: #1a2230;
+  --muted: #5b6573;
+  --accent: #2b7fff;
+  --done: #aab2c0;
+  --current: #c47f00;
+  --ok: #1f9d57;
+  --bad: #d23b3b;
+  --canvas-bg: #fbfcfe;
+  --btn2-bg: #e6ebf2;
+  --row-hover: #eef2f8;
+  --row-current: #eaf1ff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel);
+}
+
+h1 { margin: 0 0 10px; font-size: 19px; font-weight: 600; }
+
+.controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.controls label { color: var(--muted); font-size: 14px; }
+.controls .sep { width: 1px; height: 22px; background: var(--line); margin: 0 4px; }
+
+#n-input {
+  width: 90px; padding: 6px 8px; font-size: 15px;
+  background: var(--bg); color: var(--text);
+  border: 1px solid var(--line); border-radius: 6px;
+}
+
+button {
+  padding: 6px 14px; font-size: 14px; cursor: pointer;
+  background: var(--accent); color: #06121f; border: none; border-radius: 6px;
+  font-weight: 600;
+}
+button:disabled { background: #30363d; color: #6b7280; cursor: default; }
+#play-btn, #step-btn, #replay-btn, #theme-btn { background: var(--btn2-bg); color: var(--text); }
+#play-btn:disabled { background: #30363d; color: #6b7280; }
+
+.speed { display: flex; align-items: center; gap: 6px; }
+#speed { vertical-align: middle; }
+#speed-val { color: var(--text); font-variant-numeric: tabular-nums; }
+
+.status { margin-top: 10px; font-size: 14px; min-height: 20px; color: var(--muted); }
+.status.ok { color: var(--ok); }
+.status.bad { color: var(--bad); }
+
+.factorization { margin-top: 6px; min-height: 22px; font-size: 16px; color: var(--text); }
+.factorization .mjx-container { color: var(--text); }
+
+main { flex: 1; display: flex; min-height: 0; }
+
+.stage {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  padding: 16px; min-width: 0; min-height: 0;
+}
+.canvas-wrap {
+  position: relative; aspect-ratio: 1 / 1;
+  max-width: 100%; max-height: 100%; height: 100%;
+}
+#canvas {
+  display: block; width: 100%; height: 100%;
+  background: var(--canvas-bg); border: 1px solid var(--line); border-radius: 10px;
+  cursor: grab; touch-action: none;
+}
+#canvas.grabbing { cursor: grabbing; }
+
+.zoom-controls {
+  position: absolute; right: 12px; bottom: 12px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.zoom-controls button {
+  width: 38px; height: 34px; padding: 0; font-size: 16px; font-weight: 700;
+  background: var(--btn2-bg); color: var(--text);
+  border: 1px solid var(--line); border-radius: 7px; opacity: 0.9;
+}
+.zoom-controls button#zoom-reset { font-size: 12px; font-weight: 600; }
+.zoom-controls button:hover { opacity: 1; }
+
+.panel {
+  width: 360px; border-left: 1px solid var(--line);
+  background: var(--panel); display: flex; flex-direction: column; min-height: 0;
+}
+.panel-head {
+  padding: 12px 16px; border-bottom: 1px solid var(--line);
+  font-weight: 600; color: var(--muted);
+}
+#cmd-count { color: var(--muted); font-weight: 400; }
+
+#cmd-list { margin: 0; padding: 6px 0; overflow-y: auto; flex: 1; list-style: none; }
+#cmd-list li {
+  padding: 6px 16px 6px 44px; font-size: 13.5px; line-height: 1.45;
+  color: var(--muted); position: relative; cursor: pointer; border-left: 3px solid transparent;
+}
+#cmd-list li .idx {
+  position: absolute; left: 12px; top: 6px; width: 26px; text-align: right;
+  color: #586273; font-variant-numeric: tabular-nums; font-size: 12px;
+}
+#cmd-list li .op { color: var(--accent); font-size: 11px; margin-right: 6px; }
+#cmd-list li.done { color: var(--done); }
+#cmd-list li.current {
+  color: var(--text); background: var(--row-current); border-left-color: var(--current);
+}
+#cmd-list li:hover { background: var(--row-hover); }
