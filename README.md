@@ -46,6 +46,23 @@ n = 2^k · (互不相同的费马素数之积)
 
 ## 二、环境与安装
 
+### 一键使用（推荐，无需自己装环境）
+
+直接下载自带运行环境的完整包：
+
+**[Straightedge-and-Compass-v1.0-full.zip](https://github.com/xuda-ye-math/Straightedge-and-Compass/releases/download/v1.0/Straightedge-and-Compass-v1.0-full.zip)**
+
+它已经包含全部源码与 Linux / Windows 两个平台**装好依赖的虚拟环境**（以及 `data/` 预生成缓存），
+解压后无需联网安装即可运行：
+
+- **Windows**：解压后进入文件夹，**右键点击 `run_Windows.ps1` → 「使用 PowerShell 运行」**，
+  它会自动启动服务器并打开浏览器。
+- **Linux**：解压后在文件夹里运行 `./run_linux_amd64`。
+
+> 若想自己手动搭建环境（而不是用上面的完整包），见下面各小节。
+
+### 手动安装
+
 只需要 **Python 3.9 及以上**。后端唯一的第三方依赖是 **`sympy`**（用于求原根、做精确代数；
 `mpmath` 会随 `sympy` 一起装上）。前端与服务器只用标准库，**不需要任何额外依赖，也不需要
 `numpy`**。
