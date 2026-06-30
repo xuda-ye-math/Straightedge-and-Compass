@@ -1,6 +1,9 @@
 # virtual environment (recreate with: python3 -m venv --copies venv_linux_amd64
 #                                     && venv_linux_amd64/bin/pip install -r requirements.txt)
 venv_linux_amd64/
+# Windows venv (recreate with: py -3 -m venv --copies venv_Windows
+#                              && venv_Windows\Scripts\python.exe -m pip install -r requirements.txt)
+venv_Windows/
 
 # Python bytecode (regenerable)
 __pycache__/

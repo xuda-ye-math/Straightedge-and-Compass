@@ -46,8 +46,11 @@ n = 2^k · (互不相同的费马素数之积)
 `mpmath` 会随 `sympy` 一起装上）。前端与服务器只用标准库，**不需要任何额外依赖，也不需要
 `numpy`**。
 
-虚拟环境放在普通文件夹 **`venv_linux_amd64`**（非隐藏的点文件夹）里，并随仓库一起提供；
-用 `--copies` 创建时会把 **Python 可执行文件复制进该文件夹**（而非软链接），因此解释器自带其中。
+虚拟环境放在普通文件夹（非隐藏的点文件夹）里，并随仓库一起提供；用 `--copies` 创建时会把
+**Python 可执行文件复制进该文件夹**（而非软链接），因此解释器自带其中。每个平台一个文件夹，
+名字里标明平台：Linux 用 **`venv_linux_amd64`**，Windows 用 **`venv_Windows`**。
+
+### Linux
 
 ```bash
 # 1. 在项目根目录创建虚拟环境（--copies：把解释器复制进文件夹，自带 Python 可执行文件）
@@ -60,9 +63,25 @@ venv_linux_amd64/bin/pip install -r requirements.txt
 venv_linux_amd64/bin/pip install sympy
 ```
 
-> 文件夹名中的 `linux_amd64` 标明其中自带的是 Linux/amd64 平台的解释器。若仓库已附带该文件夹，
-> 在相同平台上可直接使用、无需重建。在其它平台上请按相同方式新建对应虚拟环境（例如 Windows：
-> `python -m venv --copies venv_win_amd64`，解释器位于 `venv_win_amd64\Scripts\python.exe`）。
+解释器位于 `venv_linux_amd64/bin/python`。
+
+### Windows（PowerShell）
+
+```powershell
+# 1. 创建虚拟环境（用 py 启动器选 Python 3，--copies 把解释器复制进文件夹）
+py -3 -m venv --copies venv_Windows
+
+# 2. 安装依赖
+venv_Windows\Scripts\python.exe -m pip install --upgrade pip
+venv_Windows\Scripts\python.exe -m pip install -r requirements.txt
+# 或者直接：
+venv_Windows\Scripts\python.exe -m pip install sympy
+```
+
+解释器位于 `venv_Windows\Scripts\python.exe`。
+
+> 文件夹名中的平台后缀标明其中自带的解释器属于哪个平台。若仓库已附带对应文件夹，在相同平台上
+> 可直接使用、无需重建；在其它平台上请按上面的方式新建对应的虚拟环境。
 
 ---
 
@@ -72,16 +91,35 @@ venv_linux_amd64/bin/pip install sympy
 
 最简单的方式是运行启动脚本，它会用自带解释器启动服务器并**自动打开浏览器**（按 Ctrl-C 停止）：
 
+**Linux：**
+
 ```bash
 ./run_linux_amd64            # 默认 8000 端口
 ./run_linux_amd64 9000       # 自定义端口
 ```
 
+**Windows（PowerShell）：**
+
+```powershell
+.\run_Windows.ps1            # 默认 8000 端口
+.\run_Windows.ps1 9000       # 自定义端口
+```
+
+> 若 PowerShell 因执行策略拒绝运行脚本，可改用：
+> `powershell -ExecutionPolicy Bypass -File .\run_Windows.ps1`
+
 也可以手动启动服务器：
 
 ```bash
+# Linux
 venv_linux_amd64/bin/python server.py            # 默认 http://127.0.0.1:8000/
 venv_linux_amd64/bin/python server.py --port 9000   # 自定义端口
+```
+
+```powershell
+# Windows
+venv_Windows\Scripts\python.exe server.py               # 默认 http://127.0.0.1:8000/
+venv_Windows\Scripts\python.exe server.py --port 9000   # 自定义端口
 ```
 
 启动后在浏览器打开 **http://localhost:8000/** ，在输入框填入 `n`，点击「作图」即可。
@@ -99,6 +137,9 @@ venv_linux_amd64/bin/python server.py --port 9000   # 自定义端口
 
 `backend.cli` 负责生成并校验作图命令流，带有实时、带时间戳的状态日志（同时输出到屏幕和
 `data/generate.log`）：
+
+下面以 Linux 路径为例；Windows 下把 `venv_linux_amd64/bin/python` 换成
+`venv_Windows\Scripts\python.exe` 即可，其余参数完全相同。
 
 ```bash
 # 生成 5 个费马素数的命令流（3,5,17,257 与 65537）
@@ -118,7 +159,13 @@ venv_linux_amd64/bin/python -m backend.cli --n 17 --validate
 ### 运行测试
 
 ```bash
+# Linux
 venv_linux_amd64/bin/python -m unittest discover -s tests -v
+```
+
+```powershell
+# Windows
+venv_Windows\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
 ---
@@ -171,7 +218,9 @@ venv_linux_amd64/bin/python -m unittest discover -s tests -v
 Straightedge-and-Compass/
 ├─ requirements.txt          # 依赖（sympy）
 ├─ venv_linux_amd64/         # 虚拟环境（自带 Linux/amd64 Python 可执行文件）
-├─ run_linux_amd64           # 一键启动：开服务器并打开浏览器（可执行）
+├─ venv_Windows/             # 虚拟环境（自带 Windows Python 可执行文件）
+├─ run_linux_amd64           # Linux 一键启动：开服务器并打开浏览器（可执行）
+├─ run_Windows.ps1           # Windows 一键启动：开服务器并打开浏览器（PowerShell）
 ├─ server.py                 # 标准库 HTTP 服务器：服务 web/ 与 /api/construct?n=
 ├─ backend/                  # 纯代数后端
 │  ├─ constructible.py       # 可作图判据、质因数分解、费马素数逻辑
