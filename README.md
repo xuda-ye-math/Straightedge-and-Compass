@@ -50,7 +50,7 @@ n = 2^k · (互不相同的费马素数之积)
 
 直接下载自带运行环境的完整包：
 
-**[Straightedge-and-Compass-v1.0-full.zip](https://github.com/xuda-ye-math/Straightedge-and-Compass/releases/download/v1.0/Straightedge-and-Compass-v1.0-full.zip)**
+**[Straightedge-and-Compass-v1.1-full.zip](https://github.com/xuda-ye-math/Straightedge-and-Compass/releases/download/v1.1/Straightedge-and-Compass-v1.1-full.zip)**
 
 它已经包含全部源码与 Linux / Windows 两个平台**装好依赖的虚拟环境**（以及 `data/` 预生成缓存），
 解压后无需联网安装即可运行：
